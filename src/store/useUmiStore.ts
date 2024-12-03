@@ -27,12 +27,13 @@ const useUmiStore = create<UmiState>()((set, get) => ({
   updateSigner: (signer) => {
     const currentSigner = get().signer;
     const newSigner = createSignerFromWalletAdapter(signer);
+    const newUmi = get().umi.use(signerIdentity(newSigner));
 
     if (
       !currentSigner ||
       currentSigner.publicKey.toString() !== newSigner.publicKey.toString()
     ) {
-      set(() => ({ signer: newSigner }));
+      set(() => ({ signer: newSigner, umi: newUmi }));
     }
   },
 }));
